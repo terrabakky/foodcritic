@@ -8,13 +8,14 @@ module FoodCritic
       @args = args
       @original_args = args.dup
       @options = {
-        fail_tags: [],
+        fail_tags: ['any'],
         tags: [],
         include_rules: [],
         cookbook_paths: [],
         role_paths: [],
         environment_paths: [],
-        exclude_paths: []
+        exclude_paths: ['test/**/*', 'spec/**/*', 'features/**/*'],
+        progress: true
       }
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_paths]'
@@ -26,9 +27,9 @@ module FoodCritic
         opts.on('-l', '--list',
                 'List all enabled rules and their descriptions.') do |t|
           @options[:list] = t
-        end                
+        end
         opts.on('-f', '--epic-fail TAGS',
-                "Fail the build based on tags. Use 'any' to fail "\
+                "Fail the build based on tags. Default of 'any' to fail "\
                 'on all warnings.') do |t|
           @options[:fail_tags] << t
         end
@@ -59,9 +60,9 @@ module FoodCritic
                 'foodcritic/rules/**/*.rb') do |g|
           @options[:search_gems] = true
         end
-        opts.on("-P", "--progress",
-                "Show progress of files being checked") do
-          @options[:progress] = true
+        opts.on('-P', '--[no-]progress',
+                'Show progress of files being checked. default:  true') do |q|
+          @options[:progress] = q
         end
         opts.on('-R', '--role-path PATH',
                 'Role path(s) to check.') do |r|
@@ -76,7 +77,8 @@ module FoodCritic
           @options[:version] = true
         end
         opts.on('-X', '--exclude PATH',
-                'Exclude path(s) from being linted.') do |e|
+                'Exclude path(s) from being linted. Default test/**/*,'\
+                'spec/**/*,features/**/*') do |e|
           options[:exclude_paths] << e
         end
       end
