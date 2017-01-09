@@ -18,14 +18,14 @@ module FoodCritic
         progress: true
       }
       @parser = OptionParser.new do |opts|
-        opts.banner = 'foodcritic [cookbook_paths]'
-        opts.on('-t', '--tags TAGS',
-                'Check against (or exclude ~) rules with the '\
-                'specified tags.') do |t|
+        opts.banner = "foodcritic [cookbook_paths]"
+        opts.on("-t", "--tags TAGS",
+                "Check against (or exclude ~) rules with the "\
+                "specified tags.") do |t|
           @options[:tags] << t
         end
-        opts.on('-l', '--list',
-                'List all enabled rules and their descriptions.') do |t|
+        opts.on("-l", "--list",
+                "List all enabled rules and their descriptions.") do |t|
           @options[:list] = t
         end
         opts.on('-f', '--epic-fail TAGS',
@@ -33,58 +33,58 @@ module FoodCritic
                 'on all warnings.') do |t|
           @options[:fail_tags] << t
         end
-        opts.on('-c', '--chef-version VERSION',
-                'Only check against rules valid for this version '\
-                'of Chef.') do |c|
+        opts.on("-c", "--chef-version VERSION",
+                "Only check against rules valid for this version "\
+                "of Chef.") do |c|
           @options[:chef_version] = c
         end
-        opts.on('-B', '--cookbook-path PATH',
-                'Cookbook path(s) to check.') do |b|
+        opts.on("-B", "--cookbook-path PATH",
+                "Cookbook path(s) to check.") do |b|
           @options[:cookbook_paths] << b
         end
-        opts.on('-C', '--[no-]context',
-                'Show lines matched against rather than the '\
-                'default summary.') do |c|
+        opts.on("-C", "--[no-]context",
+                "Show lines matched against rather than the "\
+                "default summary.") do |c|
           @options[:context] = c
         end
-        opts.on('-E', '--environment-path PATH',
-                'Environment path(s) to check.') do |e|
+        opts.on("-E", "--environment-path PATH",
+                "Environment path(s) to check.") do |e|
           @options[:environment_paths] << e
         end
-        opts.on('-I', '--include PATH',
-                'Additional rule file path(s) to load.') do |i|
+        opts.on("-I", "--include PATH",
+                "Additional rule file path(s) to load.") do |i|
           @options[:include_rules] << i
         end
-        opts.on('-G', '--search-gems',
-                'Search rubygems for rule files with the path '\
-                'foodcritic/rules/**/*.rb') do |g|
+        opts.on("-G", "--search-gems",
+                "Search rubygems for rule files with the path "\
+                "foodcritic/rules/**/*.rb") do |g|
           @options[:search_gems] = true
         end
         opts.on('-P', '--[no-]progress',
                 'Show progress of files being checked. default:  true') do |q|
           @options[:progress] = q
         end
-        opts.on('-R', '--role-path PATH',
-                'Role path(s) to check.') do |r|
+        opts.on("-R", "--role-path PATH",
+                "Role path(s) to check.") do |r|
           @options[:role_paths] << r
         end
-        opts.on('-S', '--search-grammar PATH',
-                'Specify grammar to use when validating search syntax.') do |s|
+        opts.on("-S", "--search-grammar PATH",
+                "Specify grammar to use when validating search syntax.") do |s|
           @options[:search_grammar] = s
         end
-        opts.on('-V', '--version',
-                'Display the foodcritic version.') do |v|
+        opts.on("-V", "--version",
+                "Display the foodcritic version.") do |v|
           @options[:version] = true
         end
         opts.on('-X', '--exclude PATH',
-                'Exclude path(s) from being linted. Default test/**/*,'\
-                'spec/**/*,features/**/*') do |e|
+                'Exclude path(s) from being linted. PATH is relative to the cookbook, not an absolute PATH.'\
+                'Default test/**/*, spec/**/*,features/**/*') do |e|
           options[:exclude_paths] << e
         end
       end
       # -v is not implemented but OptionParser gives the Foodcritic's version
       # if that flag is passed
-      if args.include? '-v'
+      if args.include? "-v"
         help
       else
         begin
@@ -99,7 +99,7 @@ module FoodCritic
     #
     # @return [Boolean] True if help should be shown.
     def show_help?
-      @args.length == 1 && @args.first == '--help'
+      @args.length == 1 && @args.first == "--help"
     end
 
     # The help text.

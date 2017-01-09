@@ -8,12 +8,12 @@ module FoodCritic
     end
 
     def xml_create_node(doc, c)
-      Nokogiri::XML::Node.new(c.first.to_s.gsub(/[^a-z_]/, ''), doc)
+      Nokogiri::XML::Node.new(c.first.to_s.gsub(/[^a-z_]/, ""), doc)
     end
 
     def xml_document(doc, xml_node)
       if doc.nil?
-        doc = Nokogiri::XML('<opt></opt>')
+        doc = Nokogiri::XML("<opt></opt>")
         xml_node = doc.root
       end
       [doc, xml_node]
@@ -23,15 +23,28 @@ module FoodCritic
       child.each do |c|
         n = xml_create_node(doc, c)
         c.drop(1).each do |a|
-          xml_node.add_child(build_xml(a, doc, n))
+          if a.first == :@label
+            # if the ruby 1.9 hash syntax is used,
+            # the ast like below is generated.
+            # ast:
+            #  [:assoc_new,
+            #   [:@label, "service:", [6, 39]]]
+
+            # create a label node and add it to the accos_new children nodes
+            label_node = xml_create_node(doc, a)
+            n.add_child(build_xml(a, doc, label_node))
+            xml_node.add_child(n)
+          else
+            xml_node.add_child(build_xml(a, doc, n))
+          end
         end
       end
     end
 
     def xml_position_node(doc, xml_node, child)
-      pos = Nokogiri::XML::Node.new('pos', doc)
-      pos['line'] = child.first.to_s
-      pos['column'] = child[1].to_s
+      pos = Nokogiri::XML::Node.new("pos", doc)
+      pos["line"] = child.first.to_s
+      pos["column"] = child[1].to_s
       xml_node.add_child(pos)
     end
   end
